@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hlabu Jumpsuit | Premium Traditional Wear</title>
+
+<!-- Fonts & Icons (keeps markup compact & polished) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root{
+    --primary:#8B4513;
+    --secondary:#D2691E;
+    --accent:#CD853F;
+    --light:#FAEBD7;
+    --dark:#3a2c1e;
+    --text:#3E2723;
+    --glass: rgba(255,255,255,0.85);
+    --transition: 300ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* Reset & base */
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family: "Inter", sans-serif;
+    color:var(--text);
+    margin:0;
+    background: linear-gradient(180deg,#fff 0%, #fbf7f2 100%);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  a{color:inherit;text-decoration:none}
+
+  /* HEADER */
+  header{
+    position:fixed;left:0;right:0;top:0;z-index:1100;
+    background:rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+    box-shadow:0 6px 18px rgba(20,20,20,0.06);
+    transition: padding var(--transition), box-shadow var(--transition);
+    padding:20px 0;
+  }
+
+  .container{width:90%;max-width:1200px;margin:0 auto;padding:0 15px}
+
+  .header-row{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+
+  .logo{
+    font-family:"Playfair Display",serif;
+    font-size:1.6rem;color:var(--primary);font-weight:700;letter-spacing:0.6px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo span{color:var(--secondary);font-weight:600}
+
+  nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;align-items:center}
+  nav a{font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.8px; color:var(--dark); position:relative}
+  nav a:after{content:'';position:absolute;height:2px;left:0;right:0;bottom:-6px;width:0;background:var(--primary);transition:width .25s}
+  nav a:hover:after{width:100%}
+  .mobile-toggle{display:none;font-size:1.25rem;color:var(--primary);cursor:pointer}
+
+  /* HERO */
+  .hero{
+    padding:150px 0 110px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .eyebrow{font-weight:600;color:var(--accent);letter-spacing:1px;margin-bottom:8px}
+  .hero h1{font-family:"Playfair Display",serif;font-size:2.9rem;margin:8px auto;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,0.35);max-width:900px}
+  .hero p{color:rgba(255,255,255,0.95);font-size:1.05rem;margin:18px auto 30px;max-width:760px;font-weight:300}
+  .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  /* Hero background image & gradient overlay */
+  .hero-bg{
+    position:absolute;inset:0;
+    background-image: url('image1.jpg');
+    background-size:cover;background-position:center;
+    transform-origin:center;
+    filter:brightness(.6) saturate(.95);
+    z-index:-2;
+    transition: transform 12s linear;
+  }
+  /* slow parallax drift (subtle) */
+  @keyframes drift { from { transform:scale(1.02) translateY(-6px);} to { transform:scale(1.04) translateY(6px);} }
+  .hero-bg{ animation: drift 18s ease-in-out infinite alternate; }
+
+  .hero-overlay{
+    position:absolute;inset:0;background:linear-gradient(135deg, rgba(139,69,19,0.55), rgba(210,105,30,0.55)); z-index:-1;
+  }
+
+  /* COLLECTIONS GRID */
+  section{padding:90px 0;border-bottom:1px solid rgba(0,0,0,0.03)}
+  .section-title{text-align:center;margin-bottom:24px}
+  .section-title h2{font-family:"Playfair Display",serif;font-size:2rem;margin:0;color:var(--dark);letter-spacing:0.6px}
+  .section-sub{color:#6b4e3f;margin-top:8px;font-size:1rem}
+
+  .collections-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap:32px;margin-top:34px;
+  }
+
+  /* MAGIC IMAGE CARD (reflection + tilt + overlay description) */
+  .card{
+    background:transparent;border-radius:14px;overflow:visible;position:relative;
+    display:flex;flex-direction:column;align-items:stretch;
+  }
+
+  .magic-img{
+    position:relative;
+    transform-style:preserve-3d;
+    perspective:1400px;
+    transition: transform 600ms cubic-bezier(.2,.9,.2,1), box-shadow 600ms;
+    border-radius:12px;
+  }
+
+  .magic-img-inner{
+    position:relative;border-radius:12px;overflow:hidden;
+    will-change:transform;
+    transition: transform 600ms cubic-bezier(.2,.9,.2,1);
+    transform-origin:center center;
+    box-shadow: 0 14px 30px rgba(22,22,22,0.08);
+    background:#ddd;
+  }
+
+  .magic-img-inner img{
+    display:block;width:100%;height:360px;object-fit:cover;transition: transform 700ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* reflection element: duplicate the image, flipped */
+  .reflection{
+    transform:scaleY(-1);
+    overflow:hidden;border-radius:12px;
+    height:120px;margin-top:12px;opacity:.24;filter:blur(6px) saturate(.9);
+  }
+  .reflection img{width:100%;height:100%;object-fit:cover;display:block;transform:translateY(-60%);}
+
+  /* overlay description on image */
+  .img-overlay{
+    position:absolute;left:0;right:0;bottom:0;padding:16px 18px;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.6) 100%);
+    color:white;
+    transform:translateY(0);
+    transition: transform 300ms;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .img-title{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:600}
+  .img-desc{font-size:0.92rem;color:rgba(255,255,255,0.95);font-weight:300}
+
+  /* CTA badge on overlay */
+  .inquire-btn{
+    display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--secondary);color:white;font-weight:700;font-size:0.9rem;
+    border:none;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    transition: transform 200ms;
+  }
+  .inquire-btn:active{transform:translateY(1px) scale(.998)}
+
+  /* Hover interaction: tilt & zoom & move overlay */
+  .magic-img:hover{ transform: rotateX(8deg) rotateY(-8deg) scale(1.03); box-shadow:0 30px 60px rgba(0,0,0,0.18) }
+  .magic-img:hover .magic-img-inner img{ transform: scale(1.07) translateY(-6px) }
+  .magic-img:hover .img-overlay{ transform: translateY(-6px) }
+
+  /* Card body content */
+  .card-body{padding:18px 16px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,246,240,0.95)); border-radius:0 0 12px 12px;margin-top:-6px}
+  .card-body h3{margin:0;font-family:"Playfair Display",serif;color:var(--primary);font-size:1.05rem}
+  .card-body p{margin-top:8px;color:#6b4e3f;font-size:0.95rem;line-height:1.45}
+  .card-actions{display:flex;gap:10px;margin-top:12px;align-items:center}
+
+  /* Testimonials */
+  .testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:28px}
+  .test-card{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(249,245,240,0.9));padding:20px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.06)}
+  .quote{font-style:italic;color:#5a3f33;margin-bottom:12px}
+  .author{display:flex;gap:12px;align-items:center}
+  .avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--light),var(--accent));display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:700;font-family:"Playfair Display";}
+  .author-info h4{margin:0;font-size:0.98rem}
+  .author-info p{margin:0;color:#7a5a4a;font-size:0.85rem}
+
+  /* Contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:18px}
+  .contact-card{padding:20px;border-radius:10px;background:white;box-shadow:0 12px 30px rgba(0,0,0,0.05)}
+  .form-control{width:100%;padding:12px 14px;border-radius:8px;border:1px solid #e6e0da;font-size:0.95rem}
+
+  /* Footer */
+  footer{background:linear-gradient(135deg,var(--dark), #2b2217);color:var(--light);padding:40px 0;margin-top:30px}
+  .footer-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+  .socials a{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.06);color:var(--light);margin-right:8px}
+
+  /* Responsive */
+  @media (max-width:980px){
+    .hero h1{font-size:2.3rem}
+    nav ul{display:none}
+    .mobile-toggle{display:block}
+    .contact-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .hero{padding:120px 0 90px}
+    .magic-img-inner img{height:260px}
+    .reflection{height:90px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="container">
+    <div class="header-row">
+      <a class="logo" href="#home">Hlabu<span>Jumpsuit</span></a>
+
+      <nav>
+        <ul id="nav-menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="eyebrow">Elegant • Cultural • Timeless</div>
+    <h1>Hlabu Jumpsuit — Premium Traditional Jumpsuits</h1>
+    <p>Beautifully crafted traditional jumpsuits that celebrate African textile heritage — modern tailoring, premium fabrics, and skilled craftsmanship.</p>
+
+    <div class="cta">
+      <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi%20I%27m%20interested%20in%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+      <a class="inquire-btn" href="#collections">Explore Collections</a>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section id="collections" aria-label="Collections">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Collections</h2>
+      <div class="section-sub">Hand-crafted jumpsuits — Ankara, Kente, Adire and exclusive originals</div>
+    </div>
+
+    <div class="collections-grid">
+
+      <!-- CARD 1 -->
+      <article class="card" data-item="Ankara Print Jumpsuit">
+        <div class="magic-img" onclick="openWhatsapp('Ankara Print Jumpsuit')">
+          <div class="magic-img-inner">
+            <img src="image1.jpg" alt="Ankara Print Jumpsuit">
+            <div class="img-overlay">
+              <div class="img-title">Ankara Print Jumpsuit</div>
+              <div class="img-desc">Vibrant African print with an elegant silhouette. Breathable, comfortable and perfect for celebrations.</div>
+              <div style="margin-top:6px">
+                <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I'm%20interested%20in%20the%20Ankara%20Print%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Inquire</a>
+              </div>
+            </div>
+          </div>
+          <div class="reflection"><img src="image1.jpg" alt=""></div>
+        </div>
+        <div class="card-body">
+          <h3>Ankara Print Jumpsuit</h3>
+          <p>Beautiful contrast prints with modern tailoring — available in standard sizes or customized to fit.</p>
+          <div class="card-actions">
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20more%20info%20on%20the%20Ankara%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Quick WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="card" data-item="Kente Design Jumpsuit">
+        <div class="magic-img" onclick="openWhatsapp('Kente Design Jumpsuit')">
+          <div class="magic-img-inner">
+            <img src="image2.jpg" alt="Kente Design Jumpsuit">
+            <div class="img-overlay">
+              <div class="img-title">Kente Design Jumpsuit</div>
+              <div class="img-desc">Luxurious Kente-inspired patterns, statement piece for cultural events and formal gatherings.</div>
+              <div style="margin-top:6px">
+                <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I'm%20interested%20in%20the%20Kente%20Design%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Inquire</a>
+              </div>
+            </div>
+          </div>
+          <div class="reflection"><img src="image2.jpg" alt=""></div>
+        </div>
+        <div class="card-body">
+          <h3>Kente Design Jumpsuit</h3>
+          <p>Handpicked textiles and bold geometry. Tailored to flatter and built to last.</p>
+          <div class="card-actions">
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20more%20info%20on%20the%20Kente%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Quick WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 3 -->
+      <article class="card" data-item="Adire Tie-Dye Jumpsuit">
+        <div class="magic-img" onclick="openWhatsapp('Adire Tie-Dye Jumpsuit')">
+          <div class="magic-img-inner">
+            <img src="image3.jpg" alt="Adire Tie-Dye Jumpsuit">
+            <div class="img-overlay">
+              <div class="img-title">Adire Tie-Dye Jumpsuit</div>
+              <div class="img-desc">Indigo-dyed traditional patterns reimagined into a soft, wearable jumpsuit.</div>
+              <div style="margin-top:6px">
+                <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I'm%20interested%20in%20the%20Adire%20Tie-Dye%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Inquire</a>
+              </div>
+            </div>
+          </div>
+          <div class="reflection"><img src="image3.jpg" alt=""></div>
+        </div>
+        <div class="card-body">
+          <h3>Adire Tie-Dye Jumpsuit</h3>
+          <p>Soft indigo tones with subtle patterns. Perfect for casual and semi-formal wear.</p>
+          <div class="card-actions">
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20more%20info%20on%20the%20Adire%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Quick WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 4 -->
+      <article class="card" data-item="Signature Hlabu Jumpsuit">
+        <div class="magic-img" onclick="openWhatsapp('Signature Hlabu Jumpsuit')">
+          <div class="magic-img-inner">
+            <img src="image4.jpg" alt="Signature Hlabu Jumpsuit">
+            <div class="img-overlay">
+              <div class="img-title">Signature Hlabu Jumpsuit</div>
+              <div class="img-desc">Our house design — subtle embroidery, premium lining, and a flattering cut.</div>
+              <div style="margin-top:6px">
+                <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I'm%20interested%20in%20the%20Signature%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Inquire</a>
+              </div>
+            </div>
+          </div>
+          <div class="reflection"><img src="image4.jpg" alt=""></div>
+        </div>
+        <div class="card-body">
+          <h3>Signature Hlabu Jumpsuit</h3>
+          <p>Timeless and refined — the premium option for those who want classic elegance with modern comfort.</p>
+          <div class="card-actions">
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20more%20info%20on%20the%20Signature%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Quick WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 5 (About/Feature image) -->
+      <article class="card" data-item="Bespoke & Custom">
+        <div class="magic-img" onclick="openWhatsapp('Bespoke & Custom Jumpsuit')">
+          <div class="magic-img-inner">
+            <img src="image5.jpg" alt="Bespoke & Custom">
+            <div class="img-overlay">
+              <div class="img-title">Bespoke & Custom</div>
+              <div class="img-desc">Custom fittings available. Tell us your size and style — we craft it by hand.</div>
+              <div style="margin-top:6px">
+                <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20a%20custom%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Custom Order</a>
+              </div>
+            </div>
+          </div>
+          <div class="reflection"><img src="image5.jpg" alt=""></div>
+        </div>
+        <div class="card-body">
+          <h3>Bespoke & Custom</h3>
+          <p>Personalized service — choose fabric, pattern and measurement options for a perfect fit.</p>
+          <div class="card-actions">
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%20want%20a%20custom%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> Quick WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" aria-label="About">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Story</h2>
+      <div class="section-sub">Preserving traditional textile arts with contemporary tailoring</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;color:var(--primary);margin-bottom:12px">Craftsmanship & Heritage</h3>
+        <p style="color:#6b4e3f;line-height:1.6">
+          Hlabu Jumpsuit was founded to honour the craft of textile artisans while offering modern silhouettes that suit everyday life and special occasions. Each jump suit is thoughtfully designed and stitched by skilled hands using quality fabrics.
+        </p>
+        <ul style="color:#6b4e3f;line-height:1.8;margin-top:10px">
+          <li>Authentic prints & hand-dye techniques</li>
+          <li>Premium lining & reinforced seams</li>
+          <li>Custom fitting available on request</li>
+        </ul>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.06)">
+        <img src="image5.jpg" alt="Our Craftsmanship" style="width:100%;height:100%;object-fit:cover;display:block">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" aria-label="Testimonials">
+  <div class="container">
+    <div class="section-title">
+      <h2>Customer Love</h2>
+      <div class="section-sub">Real feelings — curated for the look</div>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="test-card">
+        <div class="quote">"The Ankara jumpsuit I ordered for my sister's wedding looked incredible — flawless fit and so many compliments. Hlabu delivered beyond expectations."</div>
+        <div class="author">
+          <div class="avatar">NM</div>
+          <div class="author-info">
+            <h4>Nthabiseng M.</h4>
+            <p>Johannesburg</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="quote">"Custom order was spot on. The tailoring was precise and the fabric durable. I will order again for every event."</div>
+        <div class="author">
+          <div class="avatar">PK</div>
+          <div class="author-info">
+            <h4>Palesa K.</h4>
+            <p>Cape Town</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="quote">"Hlabu strikes the perfect balance between tradition and modern style. My Adire jumpsuit is now my go-to outfit."</div>
+        <div class="author">
+          <div class="avatar">PV</div>
+          <div class="author-info">
+            <h4>Pulane V.</h4>
+            <p>Durban</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" aria-label="Contact">
+  <div class="container">
+    <div class="section-title">
+      <h2>Get In Touch</h2>
+      <div class="section-sub">Questions or custom orders — we reply fast on WhatsApp</div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h4 style="margin-top:0;color:var(--primary)">Visit our Boutique</h4>
+        <p style="color:#6b4e3f">123 Fashion District, Sandton<br>Johannesburg, South Africa</p>
+
+        <div style="margin-top:12px">
+          <p style="font-weight:700;margin-bottom:6px">Phone / WhatsApp</p>
+          <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%27m%20inquiring%20about%20Hlabu%20Jumpsuit" target="_blank"><i class="fab fa-whatsapp"></i> +27 78 403 4135</a>
+        </div>
+
+        <div style="margin-top:16px">
+          <p style="font-weight:700;margin-bottom:6px">Hours</p>
+          <p style="color:#6b4e3f">Mon–Sat: 09:00 – 18:00</p>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <form id="contact-form" onsubmit="submitContact(event)">
+          <label style="font-weight:600">Full name</label>
+          <input class="form-control" id="cf-name" required>
+
+          <label style="font-weight:600;margin-top:10px">Email</label>
+          <input class="form-control" id="cf-email" type="email" required>
+
+          <label style="font-weight:600;margin-top:10px">Message</label>
+          <textarea class="form-control" id="cf-message" rows="5" required></textarea>
+
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="inquire-btn" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+            <a class="inquire-btn" href="https://wa.me/27784034135?text=Hi,%20I%27d%20like%20to%20talk%20about%20custom%20orders" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-row">
+      <div>
+        <h3 style="color:var(--light);margin-top:0">Hlabu Jumpsuit</h3>
+        <p style="color:rgba(255,255,255,0.9)">Celebrating cultural heritage through beautifully crafted traditional jumpsuits.</p>
+        <div style="margin-top:10px" class="socials">
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="color:var(--light);margin-top:0">Quick Links</h4>
+        <ul style="list-style:none;padding:0;margin-top:8px;color:rgba(255,255,255,0.9)">
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="color:var(--light);margin-top:0">Contact</h4>
+        <p style="color:rgba(255,255,255,0.9)"><i class="fas fa-phone"></i> +27 78 403 4135</p>
+        <p style="color:rgba(255,255,255,0.9)"><i class="fas fa-envelope"></i> info@hlabujumpsuit.com</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px;color:rgba(255,255,255,0.85)">© <span id="year"></span> Hlabu Jumpsuit — Crafted with <i class="fas fa-heart" style="color:#e74c3c;margin-left:6px"></i></div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/27784034135" target="_blank" style="position:fixed;right:20px;bottom:20px;background:#25D366;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;box-shadow:0 12px 30px rgba(37,211,102,0.18);z-index:1200">
+  <i class="fab fa-whatsapp" style="font-size:22px"></i>
+</a>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu toggle
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  mobileToggle.addEventListener('click', () => {
+    navMenu.style.display = (navMenu.style.display === 'flex') ? 'none' : 'flex';
+    navMenu.style.flexDirection = 'column';
+    navMenu.style.background = 'white';
+    navMenu.style.padding = '18px';
+    navMenu.style.position = 'absolute';
+    navMenu.style.right = '16px';
+    navMenu.style.top = '66px';
+    navMenu.style.boxShadow = '0 10px 40px rgba(0,0,0,0.08)';
+  });
+
+  // Sticky header shrink
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('site-header');
+    if (window.scrollY > 60) {
+      header.style.padding = '10px 0';
+      header.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
+    } else {
+      header.style.padding = '20px 0';
+      header.style.boxShadow = '0 6px 18px rgba(20,20,20,0.06)';
+    }
+  });
+
+  // Smooth anchor close mobile menu
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      const href = a.getAttribute('href');
+      if(href.length>1){
+        e.preventDefault();
+        const el = document.querySelector(href);
+        if(el) window.scrollTo({ top: el.offsetTop - 78, behavior:'smooth' });
+      }
+      if(window.innerWidth <= 980){
+        document.getElementById('nav-menu').style.display = 'none';
+      }
+    });
+  });
+
+  // Contact form submit (fake)
+  function submitContact(e){
+    e.preventDefault();
+    const n = document.getElementById('cf-name').value.trim();
+    alert('Thanks ' + (n||'friend') + '! Your message has been received — we will reply on WhatsApp or email soon.');
+    e.target.reset();
+  }
+
+  // open whatsapp with item name
+  function openWhatsapp(item){
+    const text = encodeURIComponent('Hi, I would like information about the ' + item);
+    window.open('https://wa.me/27784034135?text=' + text, '_blank');
+  }
+
+  // Accessibility: allow Enter/Space to open whatsapp card
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        const item = card.dataset.item || '';
+        openWhatsapp(item);
+      }
+    });
+    card.setAttribute('tabindex', '0');
+  });
+</script>
+
+</body>
+</html>
